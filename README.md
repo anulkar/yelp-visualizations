@@ -14,5 +14,14 @@ Explore and communicate insights from Yelp's businesses and tips dataset for one
 
 https://github.com/anulkar/yelp-visualizations/blob/master/Rough%20Sketch%20of%20Final%20Yelp%20Visualization%20Website.png
 
+## Tools/Technologies
+* Python-Flask powered RESTFUL API
+* MongoDB
+* HTML, CSS, JS
+* [D3.js](https://d3js.org/)
+* [Plotly.js](https://plotly.com/javascript/)
+* _One additional JS Library (TBD)_
+
+
 ## GitHub Repository
 https://github.com/anulkar/yelp-visualizations

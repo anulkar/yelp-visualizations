@@ -1,11 +1,18 @@
-# yelp-visualizations
-Data Science Project: Visualizing Yelp's Dataset
+# Data Science Project: Visualizing Yelp's Dataset
 
-Use Yelp business and tips data sets     
+## Rationale  
 
-Link to data: https://www.yelp.com/dataset
-Documentation: https://www.yelp.com/dataset/documentation/main
+Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Bubble chart, Map plot, Dot plot, Gauge chart and Word cloud.
 
-Rationale: Provide business insights as to human behavior in Toronto and create visualizations including a bar chart, bubble chart, map plot, dot plot and word cloud
+## Dataset
+* [Yelp's Open Dataset](https://www.yelp.com/dataset)
+* [Documentation](https://www.yelp.com/dataset/documentation/main)
+  * `business.json`: Contains business data including location data, attributes, and categories.
+  * `tips.json`: Tips written by a user on a business. Tips are shorter than reviews and tend to convey quick suggestions.
 
-GitHub: https://github.com/anulkar/yelp-visualizations
+## Sample Sketch
+
+
+
+## GitHub Repository
+https://github.com/anulkar/yelp-visualizations

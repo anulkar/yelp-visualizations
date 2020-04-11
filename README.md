@@ -12,7 +12,7 @@ Explore and communicate insights from Yelp's businesses and tips dataset for one
 
 ## Sample Sketch
 
-
+https://github.com/anulkar/yelp-visualizations/blob/master/Rough%20Sketch%20of%20Final%20Yelp%20Visualization%20Website.png
 
 ## GitHub Repository
 https://github.com/anulkar/yelp-visualizations

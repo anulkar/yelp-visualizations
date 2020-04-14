@@ -26,7 +26,7 @@ print(f"Deleted {deleted_businesses.deleted_count} documents from Mongo!")
 # Insert a fresh set of business documents/rows to the DB
 print("Loading a fresh Yelp Business Dataset to Mongo...Hang Tight!")
 new_businesses = db.businesses.insert_many(yelp_business_json)
-print(f"All Yelp Business Data has been Uploaded: {db.businesses.count_documents({})}")
+print(f"Inserts completed to the businesses collection! {db.businesses.count_documents({})} total documents inserted to Mongo")
 
 # Path to Yelp's Tips JSON Dataset file
 yelp_tips_dataset_path = "assets/data/yelp_converted_tips_dataset_records.json"
@@ -43,4 +43,4 @@ print(f"Deleted {deleted_tips.deleted_count} documents from Mongo!")
 # Insert a fresh set of tips documents/rows to the DB
 print("Loading a fresh Yelp Tips Dataset to Mongo...Hang Tight!")
 new_tips = db.tips.insert_many(yelp_tips_json)
-print(f"All Yelp Tips Data has been Uploaded: {db.tips.count_documents({})}")
+print(f"Inserts completed to the tips collection! {db.tips.count_documents({})} total documents inserted to Mongo")

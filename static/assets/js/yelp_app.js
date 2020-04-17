@@ -1,12 +1,12 @@
 // Path to Yelp Business JSON dataset
-yelpBizData = "/";
+yelpBizData = "http://127.0.0.1:5000/";
 
-// Read the JSON dataset using d3
+//Read the JSON dataset using d3
 d3.json(yelpBizData).then(yelpData => {
     populateData(yelpData);
 });
-// fetch('/')
-//   // .then(res => res.json()) // comment this out for now
+// fetch('http://127.0.0.1:5000/')
+//   //.then(res => res.json()) // comment this out for now
 //   .then(res => res.text())          // convert to plain text
 //   .then(text => console.log(text))  // then log it out
 

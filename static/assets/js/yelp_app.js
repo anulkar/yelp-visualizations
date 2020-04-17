@@ -2,13 +2,13 @@
 yelpBizData = "/";
 
 // Read the JSON dataset using d3
-// d3.json(yelpBizData).then(yelpData => {
-//     populateData(yelpData);
-// });
-fetch('/')
-  // .then(res => res.json()) // comment this out for now
-  .then(res => res.text())          // convert to plain text
-  .then(text => console.log(text))  // then log it out
+d3.json(yelpBizData).then(yelpData => {
+    populateData(yelpData);
+});
+// fetch('/')
+//   // .then(res => res.json()) // comment this out for now
+//   .then(res => res.text())          // convert to plain text
+//   .then(text => console.log(text))  // then log it out
 
 function populateData(yelpData) {
     // Get a reference to the dropdown list

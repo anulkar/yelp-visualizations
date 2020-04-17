@@ -1,12 +1,14 @@
 # import necessary libraries
 from flask import Flask, render_template, redirect, jsonify
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 import json
 from bson import json_util
 from bson.json_util import dumps
 
 # create instance of Flask app
 app = Flask(__name__)
+CORS(app)
 
 # Use flask_pymongo to set up mongo connection
 app.config["MONGO_URI"] = "mongodb://localhost:27017/yelp_dataset"
@@ -27,7 +29,8 @@ def home():
 
     yelp_business_data = json.dumps(yelp_business_data, default=json_util.default)
     print(yelp_business_data)
-    return render_template("index.html", yelp_business_data=yelp_business_data)
+    # return render_template("index.html"), yelp_business_data=yelp_business_data)
+    return yelp_business_data
 
 if __name__ == "__main__":
     app.run(debug=True)

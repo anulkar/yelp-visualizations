@@ -1,10 +1,14 @@
 // Path to Yelp Business JSON dataset
-yelpBizData = "assets/data/yelp_converted_business_dataset_records.json";
+yelpBizData = "/";
 
 // Read the JSON dataset using d3
-d3.json(yelpBizData).then(yelpData => {
-    populateData(yelpData);
-});
+// d3.json(yelpBizData).then(yelpData => {
+//     populateData(yelpData);
+// });
+fetch('/')
+  // .then(res => res.json()) // comment this out for now
+  .then(res => res.text())          // convert to plain text
+  .then(text => console.log(text))  // then log it out
 
 function populateData(yelpData) {
     // Get a reference to the dropdown list

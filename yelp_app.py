@@ -19,7 +19,7 @@ mongo = PyMongo(app)
 def home():
 
     # Find data
-    toronto_businesses = mongo.db.toronto_businesses.find(limit=10)
+    toronto_businesses = mongo.db.toronto_businesses.find()
 
     yelp_business_data = []
     

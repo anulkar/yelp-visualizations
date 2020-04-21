@@ -6,41 +6,51 @@ import pymongo
 conn = "mongodb://localhost:27017"
 client = pymongo.MongoClient(conn)
 
-# Select database and collection to use
+# Select database and collections to use
 db = client.yelp_dataset
-businesses = db.businesses
-tips = db.tips
+all_businesses = db.all_businesses
+all_tips = db.all_tips
+all_checkins = db.all_checkins
+toronto_businesses = db.toronto_businesses
+toronto_businesses_tips = db.toronto_businesses_tips
+toronto_businesses_checkins = db.toronto_businesses_checkins
 
-# Path to Yelp's Business JSON Dataset file
-yelp_business_dataset_path = "assets/data/yelp_converted_business_dataset_records.json"
+# Function that takes a Yelp JSON data file and loads it into a MongoDB collection
+def load_data_to_mongo(yelp_dataset_path, collection, dataset_name):
+    # Load the JSON file
+    with open(yelp_dataset_path) as json_file:
+        yelp_json = json.load(json_file)
 
-# Load the Business JSON file
-with open(yelp_business_dataset_path) as json_business_file:
-    yelp_business_json = json.load(json_business_file)
+    # Delete all existing documents from the collection
+    print(f"Deleting documents from the '{dataset_name}' collection in MongoDB, hang tight...")
+    deleted_documents = collection.delete_many({})
+    print(f"Found and Deleted {deleted_documents.deleted_count} documents!")
 
-# Delete all existing business documents/rows from the DB
-print("Deleting all existing Yelp Business data from Mongo...Hang Tight!")
-deleted_businesses = db.businesses.delete_many({})
-print(f"Deleted {deleted_businesses.deleted_count} documents from Mongo!")
+    # Insert new documents into the collection
+    print(f"Inserting new documents into the '{dataset_name}' collection in MongoDB, hang tight...")
+    collection.insert_many(yelp_json)
+    print(f"{collection.count_documents({})} documents inserted!\n")
 
-# Insert a fresh set of business documents/rows to the DB
-print("Loading a fresh Yelp Business Dataset to Mongo...Hang Tight!")
-new_businesses = db.businesses.insert_many(yelp_business_json)
-print(f"Inserts completed to the businesses collection! {db.businesses.count_documents({})} total documents inserted to Mongo")
+# Load the Toronto Business JSON dataset
+yelp_dataset_path = "static/assets/data/yelp_toronto_business_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, toronto_businesses, "toronto_businesses")
 
-# Path to Yelp's Tips JSON Dataset file
-yelp_tips_dataset_path = "assets/data/yelp_converted_tips_dataset_records.json"
+# Load the merged JSON dataset containing Toronto Businesses & Checkins
+yelp_dataset_path = "static/assets/data/yelp_toronto_checkin_business_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, toronto_businesses_checkins, "toronto_businesses_checkins")
 
-# Load the Tips JSON file
-with open(yelp_tips_dataset_path) as json_tips_file:
-    yelp_tips_json = json.load(json_tips_file)
+# Load the merged JSON dataset containing Toronto Businesses & Tips
+yelp_dataset_path = "static/assets/data/yelp_toronto_tips_business_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, toronto_businesses_tips, "toronto_businesses_tips")
 
-# Delete all existing tips documents/rows from the DB
-print("Deleting all existing Yelp Tips data from Mongo...Hang Tight!")
-deleted_tips = db.tips.delete_many({})
-print(f"Deleted {deleted_tips.deleted_count} documents from Mongo!")
+# Load the full Business JSON dataset for all cities
+yelp_dataset_path = "static/assets/data/yelp_converted_business_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, all_businesses, "all_businesses")
 
-# Insert a fresh set of tips documents/rows to the DB
-print("Loading a fresh Yelp Tips Dataset to Mongo...Hang Tight!")
-new_tips = db.tips.insert_many(yelp_tips_json)
-print(f"Inserts completed to the tips collection! {db.tips.count_documents({})} total documents inserted to Mongo")
+# Load the full Checkin JSON dataset for all businesses
+yelp_dataset_path = "static/assets/data/yelp_converted_checkin_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, all_checkins, "all_checkins")
+
+# Load the full Tips JSON dataset for all businesses
+yelp_dataset_path = "static/assets/data/yelp_converted_tips_dataset_records.json"
+load_data_to_mongo(yelp_dataset_path, all_tips, "all_tips")

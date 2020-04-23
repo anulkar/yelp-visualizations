@@ -33,6 +33,7 @@ var myMap = L.map("yelp-map", {
 d3.json(yelpBizData).then(yelpData => {
     displaySummaryStats(yelpData);
     displayCityMap(yelpData);
+    displayStarsVSReviews(yelpData);
     //populateData(yelpData);
 });
 
@@ -90,6 +91,49 @@ function displayCityMap(yelpData) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
+}
+
+function displayStarsVSReviews(yelpData)
+{   
+    var starsArray = yelpData.map(yD => {
+        return yD.stars;
+    });
+
+    var reviewsArray = yelpData.map(yD => {
+        return yD.review_count;
+    });
+
+    var trace1 = {
+        x: starsArray,
+        y: reviewsArray,
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Stars',
+        marker: { size: 12 }
+      };
+      
+    var trace2 = {
+    x: [1.5, 2.5, 3.5, 4.5, 5.5],
+    y: [4, 1, 7, 1, 4],
+    mode: 'markers',
+    type: 'scatter',
+    name: 'Reviews',
+    marker: { size: 12 }
+    };
+
+    var data = [trace1, trace2];
+
+    var layout = {
+        xaxis: {
+            range: [0, 5]
+        },
+        // yaxis: {
+        //     range: [0, 8]
+        // },
+        title:'Stars Vs Reviews'
+    };
+
+    Plotly.newPlot('yelp-viz', data, layout);
 }
 
 function populateData(yelpData) {

@@ -108,28 +108,13 @@ function displayStarsVSReviews(yelpData)
         y: reviewsArray,
         mode: 'markers',
         type: 'scatter',
-        name: 'Stars',
+        name: 'Stars vs Reviews',
         marker: { size: 12 }
       };
-      
-    var trace2 = {
-    x: [1.5, 2.5, 3.5, 4.5, 5.5],
-    y: [4, 1, 7, 1, 4],
-    mode: 'markers',
-    type: 'scatter',
-    name: 'Reviews',
-    marker: { size: 12 }
-    };
 
-    var data = [trace1, trace2];
+    var data = [trace1];
 
     var layout = {
-        xaxis: {
-            range: [0, 5]
-        },
-        // yaxis: {
-        //     range: [0, 8]
-        // },
         title:'Stars Vs Reviews'
     };
 

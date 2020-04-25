@@ -53,7 +53,7 @@ function displaySummaryStats(yelpData) {
     });
 
     var averageStars = calculateAverage(starsArray).toFixed(1);
-    d3.select("#average-stars").text(averageStars);
+    d3.select("#average-stars-summary").text(averageStars);
 }
 
 function calculateAverage(arrayOfNumbers) {

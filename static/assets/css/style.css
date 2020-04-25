@@ -55,6 +55,14 @@ html{
   display: block;
 }
 
+#stars-reviews-plot, 
+body,
+html{
+  min-height: 100%;
+  min-width: 100%;
+  display: block;
+}
+
 #footer {
   position: absolute;
   bottom: 0;

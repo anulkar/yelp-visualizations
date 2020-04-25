@@ -14,9 +14,9 @@ CORS(app)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/yelp_dataset"
 mongo = PyMongo(app)
 
-# Create route that renders index.html template and finds the Yelp businesses document from Mongo
-@app.route("/")
-def home():
+# Create route that finds the Yelp businesses document from Mongo
+@app.route("/businesses/toronto")
+def businesses():
 
     # Find data
     toronto_businesses = mongo.db.toronto_businesses.find()
@@ -24,11 +24,27 @@ def home():
     yelp_business_data = []
     
     # return yelp_business_data
-    for business in toronto_businesses:
-        yelp_business_data.append(business)
+    for toronto_business in toronto_businesses:
+        yelp_business_data.append(toronto_business)
 
     yelp_business_data = json.dumps(yelp_business_data, default=json_util.default)
     return yelp_business_data
+
+# Create route that finds the Yelp businesses summary document from Mongo
+@app.route("/businesses/toronto/summary_data")
+def summary_data():
+
+    # Find data
+    toronto_business_summary = mongo.db.toronto_business_summary.find()
+
+    yelp_business_summary_data = []
+    
+    # return yelp_business_data
+    for toronto_business in toronto_business_summary:
+        yelp_business_summary_data.append(toronto_business)
+
+    yelp_business_summary_data = json.dumps(yelp_business_summary_data, default=json_util.default)
+    return yelp_business_summary_data
 
 if __name__ == "__main__":
     app.run(debug=True)

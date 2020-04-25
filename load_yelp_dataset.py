@@ -14,22 +14,32 @@ all_checkins = db.all_checkins
 toronto_businesses = db.toronto_businesses
 toronto_businesses_tips = db.toronto_businesses_tips
 toronto_businesses_checkins = db.toronto_businesses_checkins
+toronto_business_summary = db.toronto_business_summary
 
 # Function that takes a Yelp JSON data file and loads it into a MongoDB collection
 def load_data_to_mongo(yelp_dataset_path, collection, dataset_name):
-    # Load the JSON file
-    with open(yelp_dataset_path) as json_file:
-        yelp_json = json.load(json_file)
 
-    # Delete all existing documents from the collection
-    print(f"Deleting documents from the '{dataset_name}' collection in MongoDB, hang tight...")
-    deleted_documents = collection.delete_many({})
-    print(f"Found and Deleted {deleted_documents.deleted_count} documents!")
+    # Get the count of documents in the collection
+    documents_count = collection.count_documents({})
 
-    # Insert new documents into the collection
-    print(f"Inserting new documents into the '{dataset_name}' collection in MongoDB, hang tight...")
-    collection.insert_many(yelp_json)
-    print(f"{collection.count_documents({})} documents inserted!\n")
+    # Proceed to loading the JSON file to Mongo only if no documents exist in the collection  
+    if (documents_count == 0):
+        # Load the JSON file
+        with open(yelp_dataset_path) as json_file:
+            yelp_json = json.load(json_file)
+
+        # Delete all existing documents from the collection
+        # print(f"Deleting documents from the '{dataset_name}' collection in MongoDB, hang tight...")
+        # deleted_documents = collection.delete_many({})
+        # print(f"Found and Deleted {deleted_documents.deleted_count} documents!")
+
+        # Insert new documents into the collection
+        print(f"Inserting new documents into the '{dataset_name}' collection in MongoDB, hang tight...")
+        collection.insert_many(yelp_json)
+        documents_count = collection.count_documents({})
+        print(f"{documents_count} documents inserted!\n")
+    else:
+        print(f"Found the '{dataset_name}' collection in MongoDB with {documents_count} documents.")
 
 # Load the Toronto Business JSON dataset
 yelp_dataset_path = "static/assets/data/yelp_toronto_business_dataset_records.json"
@@ -42,6 +52,10 @@ load_data_to_mongo(yelp_dataset_path, toronto_businesses_checkins, "toronto_busi
 # Load the merged JSON dataset containing Toronto Businesses & Tips
 yelp_dataset_path = "static/assets/data/yelp_toronto_tips_business_dataset_records.json"
 load_data_to_mongo(yelp_dataset_path, toronto_businesses_tips, "toronto_businesses_tips")
+
+# Load the Toronto Business Summary JSON dataset
+yelp_dataset_path = "static/assets/data/yelp_toronto_business_summary_records.json"
+load_data_to_mongo(yelp_dataset_path, toronto_business_summary, "toronto_business_summary")
 
 # Load the full Business JSON dataset for all cities
 yelp_dataset_path = "static/assets/data/yelp_converted_business_dataset_records.json"

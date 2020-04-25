@@ -1,5 +1,5 @@
 // Path to Yelp Business JSON dataset
-yelpBizData = "http://127.0.0.1:5000/";
+yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {

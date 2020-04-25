@@ -1,5 +1,6 @@
 # JSON datasets 
-*.json
+yelp_converted_*.json
+yelp_academic_*.json
 
 # Api Keys
 api_keys.py

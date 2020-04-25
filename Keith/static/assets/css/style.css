@@ -1,0 +1,84 @@
+.iframeContainer {
+  padding: 20px;
+  border: 1px solid #e3e3e3;
+}
+
+/* Sticky Footer rules (https://getbootstrap.com/examples/sticky-footer/) */
+html {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  /* Padding bottom by footer height */
+  padding-bottom: 80px;
+  height: 100%;
+}
+
+.card-body {
+  height: 100%;
+}
+
+#map-holder1 {
+  height: 100%;
+}
+
+#map-holder2 {
+  height: 100%;
+}
+
+#map-holder3 {
+  height: 100%;
+}
+
+#yelp-map, 
+body,
+html{
+  min-height: 95%;
+  min-width: 100%;
+  display: block;
+}
+
+#viz-holder1 {
+  height: 100%;
+}
+
+#viz-holder2 {
+  height: 100%;
+}
+
+#yelp-viz, 
+body,
+html{
+  min-height: 100%;
+  min-width: 100%;
+  display: block;
+}
+
+#stars-reviews-plot, 
+body,
+html{
+  min-height: 100%;
+  min-width: 100%;
+  display: block;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%; /* Set the fixed height of the footer here */
+  height: 10px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+
+#footer p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.form-check-label {
+  color: white;
+}

@@ -1,5 +1,6 @@
-// Path to Yelp Business JSON dataset
+// API URLs to retrieve Yelp JSON datasets
 yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
+yelpSummaryData = "http://127.0.0.1:5000/businesses/toronto/summary_data";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -29,11 +30,106 @@ var myMap = L.map("yelp-map", {
     layers: [streetmap]
 });
 
+d3.json(yelpSummaryData).then(ySummaryData => {
+    console.log(ySummaryData)
+    initializeCategories(ySummaryData);
+});
+
+function initializeCategories(ySummaryData) {
+    var selector = d3.select("#category-filter");
+
+    var categories = ySummaryData[0].names;
+
+    // Populate the dropdown filter with the list of categories
+    selector.selectAll("option")
+        .data(categories)
+        .enter()
+        .append("option")
+        .text(value => {return value;});
+}
+  
+function optionChanged(category) {
+    //buildMetadata(category);
+   // buildGaugeChart(category);
+    //buildBubbleChart(newSample);
+}
+
+function buildMetadata(category) {
+    d3.json(yelpSummaryData).then((ySummaryData) => {
+        var metadata = ySummaryData.metadata;
+        console.log(metadata);
+        var resultArray = metadata.filter(sampleObj => sampleObj.parent == category);
+        console.log(resultArray);
+        var result = resultArray[0];
+        var PANEL = d3.select("#sample-metadata");
+
+        PANEL.html("");
+        
+        Object.entries(result).forEach(([key, value]) => {
+        PANEL.append("h6").text(key.toUpperCase() + ': ' + value); 
+        })
+    });
+}
+
+// The gauge chart
+function buildGaugeChart(category) {
+    d3.json(yelpSummaryData).then((ySD) => {
+    
+    var metadata = ySD.metadata;
+    var resultArray = metadata
+    .filter(sampleObj => {
+        return sampleObj.parent == category
+    });
+    console.log(resultArray);
+
+    var result = resultArray[0];
+    console.log(result);
+    var avg_review = result.average_review;
+    console.log(avg_review);
+
+    // creating trace and formatting
+    var gauge_trace = [
+        {
+        domain: { x: [0, 1], y: [0, 1] },
+        value: avg_review,
+        title: {text: "Category Average Review", font: {size: 18}},
+        type: "indicator",
+        mode: "gauge+number",
+        gauge: {
+            axis: { range: [0, 5]},
+            bar: { color: "steelblue" },
+            steps: [
+            { range: [0, 1], color: 'rgba(183,28,28, .5)' },
+            { range: [1, 2], color: 'rgba(255,179,71, .5)' },
+            { range: [2, 3], color: 'rgba(253,253,150, .5)' },
+            { range: [3, 4], color: 'rgba(14, 127, 0, .5)' },
+            { range: [4, 5], color: 'rgba(174,198,207, .5)' }
+            ],
+        }  
+        }
+    ];
+    
+    // set the layout for gauge 
+    var gauge_layout = {
+        
+        
+        width: 600, 
+        height: 500, 
+        margin: { t: 0, b: 0 }
+    };
+    
+    // create the gauge
+    Plotly.newPlot('gauge-plot', gauge_trace, gauge_layout)
+    
+    });
+
+}
+
 // Read the JSON dataset using d3
 d3.json(yelpBizData).then(yelpData => {
     displaySummaryStats(yelpData);
     displayCityMap(yelpData);
-    displayStarsVSReviews(yelpData);
+    buildReviewsVsStarsChart(yelpData);
     //populateData(yelpData);
 });
 
@@ -72,7 +168,7 @@ function displayCityMap(yelpData) {
         businessMarkers.push(L.marker(coordinates)
             .bindPopup(yelpData[i].name)
             .addTo(myMap));
-        console.log("Created Business Marker: " + businessMarkers.length);
+        // console.log("Created Business Marker: " + businessMarkers.length);
         if (businessMarkers.length == 10) {
             break;
         }
@@ -93,32 +189,49 @@ function displayCityMap(yelpData) {
     }).addTo(myMap);
 }
 
-function displayStarsVSReviews(yelpData)
+function buildReviewsVsStarsChart(yelpData)
 {   
-    var starsArray = yelpData.map(yD => {
-        return yD.stars;
-    });
+    // Create Dataset using anychart.js Library
+    var dataset = anychart.data.set(yelpData);
+    //console.log(dataset);
+    // Map data
+    var mapping = dataset.mapAs({x:"stars", value:"review_count"});
 
-    var reviewsArray = yelpData.map(yD => {
-        return yD.review_count;
-    });
+    // create the chart
+    var chart = anychart.scatter(mapping);
 
-    var trace1 = {
-        x: starsArray,
-        y: reviewsArray,
-        mode: 'markers',
-        type: 'scatter',
-        name: 'Stars vs Reviews',
-        marker: { size: 12 }
-      };
+    // set the container
+    chart.container("reviews-stars-scatter-plot");
 
-    var data = [trace1];
+    // Intiate drawing the chart
+    chart.draw();
 
-    var layout = {
-        title:'Stars Vs Reviews'
-    };
+    // **** Commented code below for same scatter plot using Plotly.js instead ****
+    // ----------------------------------------------------------------------------
+    // var starsArray = yelpData.map(yD => {
+    //     return yD.stars;
+    // });
 
-    Plotly.newPlot('yelp-viz', data, layout);
+    // var reviewsArray = yelpData.map(yD => {
+    //     return yD.review_count;
+    // });
+    // var trace1 = {
+    //     x: starsArray,
+    //     y: reviewsArray,
+    //     mode: 'markers',
+    //     type: 'scatter',
+    //     name: 'Stars vs Reviews',
+    //     marker: { size: 12 }
+    //   };
+
+    // var data = [trace1];
+
+    // var layout = {
+    //     title:'Stars Vs Reviews'
+    // };
+
+    // Plotly.newPlot('yelp-viz', data, layout);
+    // ----------------------------------------------------------------------------
 }
 
 function populateData(yelpData) {

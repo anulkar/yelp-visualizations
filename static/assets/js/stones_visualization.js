@@ -18,10 +18,9 @@ d3.json(yelpBizData).then(function(yelpdata) {
   // create the chart
   var chart = anychart.scatter(mapping);
 
-
   // set the container
 
-  chart.container("average-stars");
+  chart.container("stars-reviews-plot");
 
   // Intiate drawing the chart
 

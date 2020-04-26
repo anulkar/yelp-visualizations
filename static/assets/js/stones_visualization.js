@@ -18,6 +18,29 @@ d3.json(yelpBizData).then(function(yelpdata) {
   // create the chart
   var chart = anychart.scatter(mapping);
 
+   // enable major grids
+  chart.xGrid(true);
+  chart.yGrid(true);
+
+  // configure the visual settings of major grids
+  chart.xGrid().stroke({color: "#85adad", thickness: 0.7});
+  chart.yGrid().stroke({color: "#85adad", thickness: 0.7});
+
+  // enable minor grids
+  chart.xMinorGrid(true);
+  chart.yMinorGrid(true);
+
+  // configure the visual settings of minor grids
+  chart.xMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+  chart.yMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+
+  // set the chart title
+  chart.xAxis().title("Rating");//create name for X axis
+  chart.yAxis().title("Review Count"); //create name for Y axis
+
+  chart.title("Review Counts by Rating"); 
+
+
   // set the container
 
   chart.container("stars-reviews-plot");
@@ -64,6 +87,8 @@ chart.data(tips, {
 // Set up the tooltip to display the % of words in the sample
 chart.tooltip().format("{%yPercentOfTotal}% ({%value})\n\n{%custom_field}");
 
+// Set the title
+chart.title("Most Common Words");
 
 // set the container
 

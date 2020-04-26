@@ -1,0 +1,59 @@
+<html>
+<head>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-cartesian.min.js"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="container" style="width: 70%; height: 70%; margin: 0; padding: 0;"></div>
+
+<script>
+d3.json("yelp_toronto_stars_summary2_records.json").then(function(yelpdata) {
+    console.log(yelpdata);
+    var ydata = yelpdata
+
+// Create Dataset using anychart.js Library
+  
+var dataset = anychart.data.set(ydata);
+  //console.log(dataset);
+  // Map data
+  var mapping = dataset.mapAs({x:"stars", value:"businesses_count"});
+
+
+  // create the chart
+  var chart = anychart.bar(mapping);
+
+  // enable major grids
+  chart.xGrid().enabled(false);
+  chart.yGrid().enabled(true);
+  // enable minor grids
+  chart.xMinorGrid().enabled(false);
+  chart.yMinorGrid().enabled(true);
+  
+  chart.xAxis().title("Category");//create name for X axis
+  chart.yAxis().title("Business Count"); //create name for Y axis
+  chart.title("Business Count by Category"); // setting title
+  chart.data(yelpdata); //specify data source
+  chart.yScale().stackMode('value');//setting percent stacking
+  var legend = chart.legend(); 
+  var barSpacing = 20; // desired space between each bar
+  var scaleY = 10; // 10x scale on rect height
+
+  var xAxisLabels = chart.xAxis().labels();
+  xAxisLabels.rotation(0)
+  
+  chart.tooltip().title("Category Data"); //configuring the tooltip
+  chart.tooltip().format("Category: {%categoryName} \nCount: {%value} \nPercent of Total: {%yPercentOfTotal}{decimalsCount:1}%");
+  // set the container
+  chart.container("container"); //reference the container Id
+
+  // Intiate drawing the chart
+
+  chart.draw();
+
+});
+</script>
+</body>
+</html>

@@ -29,7 +29,7 @@
       <strong>Yelp Dataset Visualizations</strong>
     </a>
     <form class="form">
-      <select class="city-filter my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+      <select class="city-filter my-1 mr-sm-2" id="inlineFormCustomSelectPref1">
         <option selected>Select City...</option>
         <option value="1">Las Vegas</option>
         <option value="2">Toronto</option>
@@ -61,7 +61,7 @@
     <div class="col mb-2">
       <div class="card text-center border-light bg-light">
         <div class="card-body-shadow-lg bg-success text-white rounded">
-          <h4 class="card-title" id="average-stars">#</h4>
+          <h4 class="card-title" id="average-stars-summary">#</h4>
           <h6 class="card-subtitle mb-2">Average Stars</h6>
         </div>
       </div>
@@ -98,17 +98,28 @@
         <div class="card-body">
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-viz1" role="tab" aria-controls="nav-home" aria-selected="true">Viz 1</a>
-              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-viz2" role="tab" aria-controls="nav-profile" aria-selected="false">Viz 2</a>
-              <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-contact" aria-selected="false">Viz 3</a>
+              <a class="nav-item nav-link active" id="nav-tab-viz1" data-toggle="tab" href="#nav-viz1" role="tab" aria-controls="nav-tab-viz1" aria-selected="true">Stars vs Reviews</a>
+              <a class="nav-item nav-link" id="nav-tab-viz2" data-toggle="tab" href="#nav-viz2" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Stars by Category</a>
+              <a class="nav-item nav-link" id="nav-tab-viz3" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Tips Cloud</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-viz1" role="tabpanel" aria-labelledby="nav-home-tab">
-                <div id="yelp-viz"></div>
+                <div id="reviews-stars-scatter-plot"></div>
             </div>
-            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <ul class="list-group" id="filters">
+                <li class="filter list-group-item">
+                  <label for="state">Select Business Category:</label>
+                  <select class="form-control" id="category-filter" onchange="optionChanged(this.value)">
+                  </select>
+                </li>
+              </ul>
+              <div id="stars-gauge-plot"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-contact-tab">
+              <div id="tips-cloud"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -126,8 +137,11 @@
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-bundle.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-data-adapter.min.js"></script>
   <script type="text/javascript" src="../static/assets/js/config.js"></script>       
-  <script type="text/javascript" src="../static/assets/js/yelp_dashboard.js"></script>       
+  <script type="text/javascript" src="../static/assets/js/yelp_dashboard.js"></script>
 </body>
 
 </html>

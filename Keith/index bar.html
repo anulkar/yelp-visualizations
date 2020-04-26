@@ -39,18 +39,19 @@ var dataset = anychart.data.set(ydata);
   chart.yScale().stackMode('value');//setting percent stacking
   var legend = chart.legend(); 
   var barSpacing = 20; // desired space between each bar
-  var scaleY = 10; // 10x scale on rect height
-
+  var scaleY = 100; // 10x scale on rect height
+ 
+  // label rotation
   var xAxisLabels = chart.xAxis().labels();
   xAxisLabels.rotation(0)
   
+  // format mouse over pop up
   chart.tooltip().title("Category Data"); //configuring the tooltip
   chart.tooltip().format("Category: {%categoryName} \nCount: {%value} \nPercent of Total: {%yPercentOfTotal}{decimalsCount:1}%");
   // set the container
   chart.container("container"); //reference the container Id
 
   // Intiate drawing the chart
-
   chart.draw();
 
 });

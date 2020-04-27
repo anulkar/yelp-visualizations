@@ -39,10 +39,17 @@ html{
 #nav-tabContent,
 #nav-viz1,
 #nav-viz2,
-#nav-viz3 {
+#nav-viz3,
+#nav-viz4 {
   height: 100%;
 }
 
+#biz-cat-bar-chart
+{
+  height: 90%;
+  width: 100%;
+  display: block;
+}
 #reviews-stars-scatter-plot
 {
   height: 90%;

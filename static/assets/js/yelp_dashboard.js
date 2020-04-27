@@ -32,9 +32,51 @@ var myMap = L.map("yelp-map", {
 });
 
 d3.json(yelpSummaryData).then(ySummaryData => {
-    console.log(ySummaryData)
+    buildBizCategoriesBarChart(ySummaryData);
     initializeCategories(ySummaryData);
 });
+
+function buildBizCategoriesBarChart(ySummaryData) {
+
+    // Create Dataset using anychart.js Library
+    var categories = ySummaryData[0].names;
+    var businessesCounts = ySummaryData[0].metadata.map(metadata => {
+        return metadata.businesses_count;
+    });
+    var dataset = anychart.data.set([{categories, businessesCounts}]);
+    // Map data
+    var mapping = dataset.mapAs({x: categories, value: businessesCounts});
+    // create the chart
+    var chart = anychart.bar(mapping);
+    // enable major grids
+    chart.xGrid().enabled(false);
+    chart.yGrid().enabled(true);
+    // enable minor grids
+    chart.xMinorGrid().enabled(false);
+    chart.yMinorGrid().enabled(true);
+
+    chart.xAxis().title("Category");//create name for X axis
+    chart.yAxis().title("Business Count"); //create name for Y axis
+    chart.title("Business Count by Category"); // setting title
+    //chart.data(yelpdata); //specify data source
+    chart.yScale().stackMode('value');//setting percent stacking
+    var legend = chart.legend(); 
+    var barSpacing = 20; // desired space between each bar
+    var scaleY = 100; // 10x scale on rect height
+
+    // label rotation
+    var xAxisLabels = chart.xAxis().labels();
+    xAxisLabels.rotation(0)
+
+    // format mouse over pop up
+    chart.tooltip().title("Category Data"); //configuring the tooltip
+    chart.tooltip().format("Category: {%categoryName} \nCount: {%value} \nPercent of Total: {%yPercentOfTotal}{decimalsCount:1}%");
+    // set the container
+    chart.container("biz-cat-bar-chart"); //reference the container Id
+
+    // Intiate drawing the chart
+    chart.draw();
+}
 
 function initializeCategories(ySummaryData) {
     var selector = d3.select("#category-filter");
@@ -145,7 +187,6 @@ function buildTipsTagCloud(yTipsData) {
 
     // Join the tips to create one string
     tips = tips.join(" ")
-    // console.log(tips);
 
     // create the chart using anychary.js Library
     var chart = anychart.tagCloud();

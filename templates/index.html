@@ -98,16 +98,20 @@
         <div class="card-body" id="card-tabs">
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-tab-viz1" data-toggle="tab" href="#nav-viz1" role="tab" aria-controls="nav-tab-viz1" aria-selected="true">Reviews vs Stars</a>
-              <a class="nav-item nav-link" id="nav-tab-viz2" data-toggle="tab" href="#nav-viz2" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Stars by Category</a>
-              <a class="nav-item nav-link" id="nav-tab-viz3" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Tips Tag-Cloud</a>
+              <a class="nav-item nav-link active" id="nav-tab-viz1" data-toggle="tab" href="#nav-viz4" role="tab" aria-controls="nav-tab-viz3" aria-selected="true">Business Categories</a>
+              <a class="nav-item nav-link" id="nav-tab-viz2" data-toggle="tab" href="#nav-viz2" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Reviews vs Stars</a>
+              <a class="nav-item nav-link" id="nav-tab-viz3" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-tab-viz2" aria-selected="false">Stars by Category</a>
+              <a class="nav-item nav-link" id="nav-tab-viz4" data-toggle="tab" href="#nav-viz4" role="tab" aria-controls="nav-tab-viz3" aria-selected="false">Tips Tag-Cloud</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-viz1" role="tabpanel" aria-labelledby="nav-scatter-tab">
+            <div class="tab-pane fade show active" id="nav-viz1" role="tabpanel" aria-labelledby="nav-barchart-tab">
+              <div id="biz-cat-bar-chart"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-scatter-tab">
                 <div id="reviews-stars-scatter-plot"></div>
             </div>
-            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-gauge-tab">
+            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-gauge-tab">
               <ul class="list-group" id="filters">
                 <li class="filter list-group-item">
                   <label for="state">Select Business Category:</label>
@@ -117,7 +121,7 @@
               </ul>
               <div id="stars-gauge-plot"></div>
             </div>
-            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-tipscloud-tab">
+            <div class="tab-pane fade" id="nav-viz4" role="tabpanel" aria-labelledby="nav-tipscloud-tab">
               <p class="font-weight-normal">A visual of words from Tips written by users on Yelp Businesses. Tips are shorter than reviews and tend to convey quick suggestions.</p>
               <div id="tips-tag-cloud"></div>
             </div>
@@ -139,6 +143,7 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-cartesian.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-bundle.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-data-adapter.min.js"></script>

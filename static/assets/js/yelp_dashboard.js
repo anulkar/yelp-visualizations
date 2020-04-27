@@ -1,6 +1,7 @@
 // API URLs to retrieve Yelp JSON datasets
 yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
 yelpSummaryData = "http://127.0.0.1:5000/businesses/toronto/summary_data";
+yelpTipsData = "http://127.0.0.1:5000/businesses/toronto/tips";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -133,6 +134,53 @@ d3.json(yelpBizData).then(yelpData => {
     //populateData(yelpData);
 });
 
+d3.json(yelpTipsData).then(yTipsData => {
+    buildTipsTagCloud(yTipsData);
+});
+
+function buildTipsTagCloud(yTipsData) {
+
+    // Map the tips in the database
+    var tips = yTipsData.map(row => row.text)
+
+    // Join the tips to create one string
+    tips = tips.join(" ")
+    // console.log(tips);
+
+    // create the chart using anychary.js Library
+    var chart = anychart.tagCloud();
+
+    // Set up criteria for tagCloud
+    chart.data(tips, {
+        mode: "by-word",
+        maxItems: 800,
+        ignoreItems: [
+                        "the",
+                        "and",
+                        "he",
+                        "or",
+                        "of",
+                        "in",
+                        "a",
+                        "to",
+                        "is",
+                        "for",
+                    ]
+    });
+
+    // Set up the tooltip to display the % of words in the sample
+    chart.tooltip().format("{%yPercentOfTotal}% ({%value})\n\n{%custom_field}");
+
+    // Set the title
+    chart.title("Most Common Words Found in Tips left by Yelpers");
+
+    // set the container
+    chart.container("tips-tag-cloud");
+
+    // Intiate drawing the chart
+    chart.draw();
+}
+
 function displaySummaryStats(yelpData) {
 
     d3.select("#businesses-count").text(yelpData.length);
@@ -200,6 +248,28 @@ function buildReviewsVsStarsChart(yelpData)
     // create the chart
     var chart = anychart.scatter(mapping);
 
+    // enable major grids
+    chart.xGrid(true);
+    chart.yGrid(true);
+
+    // configure the visual settings of major grids
+    chart.xGrid().stroke({color: "#85adad", thickness: 0.7});
+    chart.yGrid().stroke({color: "#85adad", thickness: 0.7});
+
+    // enable minor grids
+    chart.xMinorGrid(true);
+    chart.yMinorGrid(true);
+
+    // configure the visual settings of minor grids
+    chart.xMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+    chart.yMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+
+    // set the chart title
+    chart.xAxis().title("Stars (Rating)");//create name for X axis
+    chart.yAxis().title("Review Count"); //create name for Y axis
+
+    chart.title("Review Counts by Stars (Rating)"); 
+
     // set the container
     chart.container("reviews-stars-scatter-plot");
 
@@ -230,7 +300,7 @@ function buildReviewsVsStarsChart(yelpData)
     //     title:'Stars Vs Reviews'
     // };
 
-    // Plotly.newPlot('yelp-viz', data, layout);
+    // Plotly.newPlot('reviews-stars-scatter-plot', data, layout);
     // ----------------------------------------------------------------------------
 }
 

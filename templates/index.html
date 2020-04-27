@@ -88,26 +88,26 @@
   <div class="row" id="map-holder1">
     <div class="col-lg-6 col-md-12" id="map-holder2">
       <div class="card border-light bg-light text-center" id="map-holder3">
-        <div class="card-body">
+        <div class="card-body" id="card-map">
           <div id="yelp-map"></div>
         </div>
       </div>
     </div>
     <div class="col-lg-6 col-md-12" id="viz-holder1">
       <div class="card border-light bg-light" id="viz-holder2">
-        <div class="card-body">
+        <div class="card-body" id="card-tabs">
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-tab-viz1" data-toggle="tab" href="#nav-viz1" role="tab" aria-controls="nav-tab-viz1" aria-selected="true">Stars vs Reviews</a>
+              <a class="nav-item nav-link active" id="nav-tab-viz1" data-toggle="tab" href="#nav-viz1" role="tab" aria-controls="nav-tab-viz1" aria-selected="true">Reviews vs Stars</a>
               <a class="nav-item nav-link" id="nav-tab-viz2" data-toggle="tab" href="#nav-viz2" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Stars by Category</a>
-              <a class="nav-item nav-link" id="nav-tab-viz3" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Tips Cloud</a>
+              <a class="nav-item nav-link" id="nav-tab-viz3" data-toggle="tab" href="#nav-viz3" role="tab" aria-controls="nav-tab-viz1" aria-selected="false">Tips Tag-Cloud</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-viz1" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="tab-pane fade show active" id="nav-viz1" role="tabpanel" aria-labelledby="nav-scatter-tab">
                 <div id="reviews-stars-scatter-plot"></div>
             </div>
-            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade" id="nav-viz2" role="tabpanel" aria-labelledby="nav-gauge-tab">
               <ul class="list-group" id="filters">
                 <li class="filter list-group-item">
                   <label for="state">Select Business Category:</label>
@@ -117,8 +117,9 @@
               </ul>
               <div id="stars-gauge-plot"></div>
             </div>
-            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-contact-tab">
-              <div id="tips-cloud"></div>
+            <div class="tab-pane fade" id="nav-viz3" role="tabpanel" aria-labelledby="nav-tipscloud-tab">
+              <p class="font-weight-normal">A visual of words from Tips written by users on Yelp Businesses. Tips are shorter than reviews and tend to convey quick suggestions.</p>
+              <div id="tips-tag-cloud"></div>
             </div>
           </div>
         </div>
@@ -126,7 +127,7 @@
     </div>
   </div>
 
-  <!-- jQuery first, then Popper.js, then Bootstrap JS, d3, d3-tip, Plotly, Leaflet.js-->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS, d3, d3-tip, Plotly.js, Leaflet.js, AnyChart.js-->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -138,6 +139,7 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-bundle.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-data-adapter.min.js"></script>
   <script type="text/javascript" src="../static/assets/js/config.js"></script>       

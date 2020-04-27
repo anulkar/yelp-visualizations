@@ -19,14 +19,8 @@ body {
   height: 100%;
 }
 
-#map-holder1 {
-  height: 100%;
-}
-
-#map-holder2 {
-  height: 100%;
-}
-
+#map-holder1,
+#map-holder2,
 #map-holder3 {
   height: 100%;
 }
@@ -39,27 +33,27 @@ html{
   display: block;
 }
 
-#viz-holder1 {
+#viz-holder1,
+#viz-holder2,
+#card-tabs,
+#nav-tabContent,
+#nav-viz1,
+#nav-viz2,
+#nav-viz3 {
   height: 100%;
 }
 
-#viz-holder2 {
-  height: 100%;
-}
-
-#yelp-viz, 
-body,
-html{
-  min-height: 100%;
-  min-width: 100%;
+#reviews-stars-scatter-plot
+{
+  height: 90%;
+  width: 100%;
   display: block;
 }
 
-#stars-reviews-plot, 
-body,
-html{
-  min-height: 100%;
-  min-width: 100%;
+#tips-tag-cloud
+{
+  height: 77%;
+  width: 100%;
   display: block;
 }
 

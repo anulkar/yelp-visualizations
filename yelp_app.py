@@ -46,5 +46,21 @@ def summary_data():
     yelp_business_summary_data = json.dumps(yelp_business_summary_data, default=json_util.default)
     return yelp_business_summary_data
 
+# Create route that finds the Yelp tips data from Mongo
+@app.route("/businesses/toronto/tips")
+def tips():
+
+    # Find data
+    toronto_business_tips = mongo.db.toronto_businesses_tips.find()
+
+    yelp_tips_data = []
+    
+    # return yelp_business_data
+    for tip in toronto_business_tips:
+        yelp_tips_data.append(tip)
+
+    yelp_tips_data = json.dumps(yelp_tips_data, default=json_util.default)
+    return yelp_tips_data
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -28,12 +28,7 @@ def load_data_to_mongo(yelp_dataset_path, collection, dataset_name):
         # Load the JSON file
         with open(yelp_dataset_path) as json_file:
             yelp_json = json.load(json_file)
-
-        # Delete all existing documents from the collection
-        # print(f"Deleting documents from the '{dataset_name}' collection in MongoDB, hang tight...")
-        # deleted_documents = collection.delete_many({})
-        # print(f"Found and Deleted {deleted_documents.deleted_count} documents!")
-
+            
         # Insert new documents into the collection
         print(f"Inserting new documents into the '{dataset_name}' collection in MongoDB, hang tight...")
         collection.insert_many(yelp_json)

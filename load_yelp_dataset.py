@@ -15,6 +15,7 @@ toronto_businesses = db.toronto_businesses
 toronto_businesses_tips = db.toronto_businesses_tips
 toronto_businesses_checkins = db.toronto_businesses_checkins
 toronto_business_summary = db.toronto_business_summary
+toronto_biz_cat_summary = db.toronto_biz_cat_summary
 
 # Function that takes a Yelp JSON data file and loads it into a MongoDB collection
 def load_data_to_mongo(yelp_dataset_path, collection, dataset_name):
@@ -56,6 +57,10 @@ load_data_to_mongo(yelp_dataset_path, toronto_businesses_tips, "toronto_business
 # Load the Toronto Business Summary JSON dataset
 yelp_dataset_path = "static/assets/data/yelp_toronto_business_summary_records.json"
 load_data_to_mongo(yelp_dataset_path, toronto_business_summary, "toronto_business_summary")
+
+# Load the Toronto Business Summary JSON dataset
+yelp_dataset_path = "static/assets/data/yelp_toronto_biz_cat_summary_records.json"
+load_data_to_mongo(yelp_dataset_path, toronto_biz_cat_summary, "toronto_biz_cat_summary")
 
 # Load the full Business JSON dataset for all cities
 yelp_dataset_path = "static/assets/data/yelp_converted_business_dataset_records.json"

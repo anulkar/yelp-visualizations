@@ -58,7 +58,7 @@ load_data_to_mongo(yelp_dataset_path, toronto_businesses_tips, "toronto_business
 yelp_dataset_path = "static/assets/data/yelp_toronto_business_summary_records.json"
 load_data_to_mongo(yelp_dataset_path, toronto_business_summary, "toronto_business_summary")
 
-# Load the Toronto Business Summary JSON dataset
+# Load the Toronto Businesses-Categories Summary JSON dataset
 yelp_dataset_path = "static/assets/data/yelp_toronto_biz_cat_summary_records.json"
 load_data_to_mongo(yelp_dataset_path, toronto_biz_cat_summary, "toronto_biz_cat_summary")
 

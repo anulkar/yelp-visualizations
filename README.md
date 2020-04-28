@@ -11,7 +11,6 @@ Explore and communicate insights from Yelp's businesses and tips dataset for one
   * `tips.json`: Tips written by a user on a business. Tips are shorter than reviews and tend to convey quick suggestions.
 
 ## Sample Sketch
-
 https://github.com/anulkar/yelp-visualizations/blob/master/images/Rough%20Sketch%20of%20Final%20Yelp%20Visualization%20Website.png
 
 ## Tools/Technologies
@@ -19,8 +18,9 @@ https://github.com/anulkar/yelp-visualizations/blob/master/images/Rough%20Sketch
 * MongoDB
 * HTML, CSS, JS
 * [D3.js](https://d3js.org/)
+* AnyChart(https://www.anychart.com/)
 * [Plotly.js](https://plotly.com/javascript/)
-* _One additional JS Library (TBD)_
+* Python and Pandas to call the data, understand it, cleanse/manipulte it and create task specific JSON's
 
 
 ## GitHub Repository

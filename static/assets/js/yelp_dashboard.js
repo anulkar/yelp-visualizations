@@ -1,6 +1,7 @@
 // API URLs to retrieve Yelp JSON datasets
 yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
 yelpSummaryData = "http://127.0.0.1:5000/businesses/toronto/summary_data";
+yelpBizCatData = "http://127.0.0.1:5000/businesses/toronto/biz_cat_summary";
 yelpTipsData = "http://127.0.0.1:5000/businesses/toronto/tips";
 
 // Define all the base map layers: Streets and Dark styles
@@ -32,22 +33,22 @@ var myMap = L.map("yelp-map", {
 });
 
 d3.json(yelpSummaryData).then(ySummaryData => {
-    buildBizCategoriesBarChart(ySummaryData);
     initializeCategories(ySummaryData);
 });
 
-function buildBizCategoriesBarChart(ySummaryData) {
+d3.json(yelpBizCatData).then(yBizCatData => {
+    buildBizCategoriesBarChart(yBizCatData);
+});
+
+function buildBizCategoriesBarChart(yBizCatData) {
 
     // Create Dataset using anychart.js Library
-    var categories = ySummaryData[0].names;
-    var businessesCounts = ySummaryData[0].metadata.map(metadata => {
-        return metadata.businesses_count;
-    });
-    var dataset = anychart.data.set([{categories, businessesCounts}]);
-    // Map data
-    var mapping = dataset.mapAs({x: categories, value: businessesCounts});
+    var dataset = anychart.data.set(yBizCatData);
+    // Create Dataset using anychart.js Library
+    var mapping = dataset.mapAs({x:"parent", value:"business_count"});
     // create the chart
     var chart = anychart.bar(mapping);
+
     // enable major grids
     chart.xGrid().enabled(false);
     chart.yGrid().enabled(true);
@@ -58,19 +59,20 @@ function buildBizCategoriesBarChart(ySummaryData) {
     chart.xAxis().title("Category");//create name for X axis
     chart.yAxis().title("Business Count"); //create name for Y axis
     chart.title("Business Count by Category"); // setting title
-    //chart.data(yelpdata); //specify data source
+    chart.data(yBizCatData); //specify data source
     chart.yScale().stackMode('value');//setting percent stacking
-    var legend = chart.legend(); 
-    var barSpacing = 20; // desired space between each bar
-    var scaleY = 100; // 10x scale on rect height
+    // var legend = chart.legend(); 
+    // var barSpacing = 20; // desired space between each bar
+    // var scaleY = 100; // 10x scale on rect height
 
     // label rotation
     var xAxisLabels = chart.xAxis().labels();
-    xAxisLabels.rotation(0)
+    xAxisLabels.enabled(false);
 
     // format mouse over pop up
     chart.tooltip().title("Category Data"); //configuring the tooltip
-    chart.tooltip().format("Category: {%categoryName} \nCount: {%value} \nPercent of Total: {%yPercentOfTotal}{decimalsCount:1}%");
+    chart.tooltip().format("Category: {%parent} \nCount: {%value} \nPercent of Total: {%yPercentOfTotal}{decimalsCount:1}%");
+
     // set the container
     chart.container("biz-cat-bar-chart"); //reference the container Id
 
@@ -93,8 +95,7 @@ function initializeCategories(ySummaryData) {
   
 function optionChanged(category) {
     //buildMetadata(category);
-   // buildGaugeChart(category);
-    //buildBubbleChart(newSample);
+    buildGaugeChart(category);
 }
 
 function buildMetadata(category) {
@@ -116,56 +117,44 @@ function buildMetadata(category) {
 
 // The gauge chart
 function buildGaugeChart(category) {
-    d3.json(yelpSummaryData).then((ySD) => {
-    
-    var metadata = ySD.metadata;
-    var resultArray = metadata
-    .filter(sampleObj => {
-        return sampleObj.parent == category
+    var averageStars;
+    d3.json(yelpSummaryData).then((data) => {
+        data[0].metadata.map(metaData => {
+            if (metaData.parent == category) {
+                averageStars = metaData.average_review;
+                // Build the gauge chart
+                var data = [{
+                    type: "indicator",
+                    mode: "gauge+number",
+                    value: averageStars,
+                    title: { text: "Average Stars for <i>" + category + "</i>", font: { size: 14 } },
+                    gauge: {
+                        axis: { range: [null, 5]},
+                        bar: { color: "f15c00" },
+                        bgcolor: "white",
+                        borderwidth: 2,
+                        bordercolor: "white",
+                        steps: [
+                            { range: [0, 1], color: "009ee3", text: "0-1" },
+                            { range: [1, 2], color: "00a3c9" },
+                            { range: [2, 3], color: "00a6aa" },
+                            { range: [3, 4], color: "00a989" },
+                            { range: [4, 5], color: "2eac66" },
+                        ]
+                    }
+                }];
+                
+                // Build the layout for the gauge chart
+                var layout = {
+                    margin: { t: 25, r: 25, l: 25, b: 25 },
+                    paper_bgcolor: "white",
+                };
+                
+                // Plot the gauge chart using plotly
+                Plotly.newPlot('stars-gauge-plot', data, layout); 
+            }
+        });
     });
-    console.log(resultArray);
-
-    var result = resultArray[0];
-    console.log(result);
-    var avg_review = result.average_review;
-    console.log(avg_review);
-
-    // creating trace and formatting
-    var gauge_trace = [
-        {
-        domain: { x: [0, 1], y: [0, 1] },
-        value: avg_review,
-        title: {text: "Category Average Review", font: {size: 18}},
-        type: "indicator",
-        mode: "gauge+number",
-        gauge: {
-            axis: { range: [0, 5]},
-            bar: { color: "steelblue" },
-            steps: [
-            { range: [0, 1], color: 'rgba(183,28,28, .5)' },
-            { range: [1, 2], color: 'rgba(255,179,71, .5)' },
-            { range: [2, 3], color: 'rgba(253,253,150, .5)' },
-            { range: [3, 4], color: 'rgba(14, 127, 0, .5)' },
-            { range: [4, 5], color: 'rgba(174,198,207, .5)' }
-            ],
-        }  
-        }
-    ];
-    
-    // set the layout for gauge 
-    var gauge_layout = {
-        
-        
-        width: 600, 
-        height: 500, 
-        margin: { t: 0, b: 0 }
-    };
-    
-    // create the gauge
-    Plotly.newPlot('gauge-plot', gauge_trace, gauge_layout)
-    
-    });
-
 }
 
 // Read the JSON dataset using d3
@@ -194,7 +183,7 @@ function buildTipsTagCloud(yTipsData) {
     // Set up criteria for tagCloud
     chart.data(tips, {
         mode: "by-word",
-        maxItems: 800,
+        maxItems: 1500,
         ignoreItems: [
                         "the",
                         "and",
@@ -206,18 +195,32 @@ function buildTipsTagCloud(yTipsData) {
                         "to",
                         "is",
                         "for",
+                        "they",
+                        "be",
+                        "an",
+                        "do",
+                        "so",
+                        "it",
+                        "its",
+                        "with",
+                        "at",
+                        "i",
+                        "we",
+                        "on",
+                        "up",
+                        "are",
+                        "was",
+                        "if",
+                        "too"
                     ]
     });
 
     // Set up the tooltip to display the % of words in the sample
-    chart.tooltip().format("{%yPercentOfTotal}% ({%value})\n\n{%custom_field}");
-
+    chart.tooltip().format("{%yPercentOfTotal}% ({%value})");
     // Set the title
     chart.title("Most Common Words Found in Tips left by Yelpers");
-
     // set the container
     chart.container("tips-tag-cloud");
-
     // Intiate drawing the chart
     chart.draw();
 }

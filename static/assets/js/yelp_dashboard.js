@@ -1,9 +1,13 @@
-// API URLs to retrieve Yelp JSON datasets
-yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
-yelpSummaryData = "http://127.0.0.1:5000/businesses/toronto/summary_data";
-yelpBizCatData = "http://127.0.0.1:5000/businesses/toronto/biz_cat_summary";
-yelpTipsData = "http://127.0.0.1:5000/businesses/toronto/tips";
-yelpCheckinsData = "http://127.0.0.1:5000/businesses/toronto/checkins";
+// Setup Host and Port Info for the API URLs
+host = "http://localhost:";
+port = "5000";
+
+// Build API URLs to retrieve Yelp JSON datasets stored locally in MongoDB
+yelpBizData = host + port + "/businesses/toronto";
+yelpSummaryData = host + port + "/businesses/toronto/summary_data";
+yelpBizCatData = host + port + "/businesses/toronto/biz_cat_summary";
+yelpTipsData = host + port + "/businesses/toronto/tips";
+yelpCheckinsData = host + port + "/businesses/toronto/checkins";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -280,8 +284,7 @@ function displayCityMap(yelpData) {
         businessMarkers.push(L.marker(coordinates)
             .bindPopup(yelpData[i].name)
             .addTo(myMap));
-        // console.log("Created Business Marker: " + businessMarkers.length);
-        if (businessMarkers.length == 10) {
+        if (businessMarkers.length == 100) {
             break;
         }
     }

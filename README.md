@@ -20,7 +20,7 @@ https://github.com/anulkar/yelp-visualizations/blob/master/images/Rough%20Sketch
 * [D3.js](https://d3js.org/)
 * AnyChart(https://www.anychart.com/)
 * [Plotly.js](https://plotly.com/javascript/)
-* Python and Pandas to call the data, understand it, cleanse/manipulte it and create task specific JSON's
+* Python/Pandas and Excel to call the data, understand it, cleanse/manipulte it and create task specific JSON's
 
 
 ## GitHub Repository

@@ -3,6 +3,7 @@ yelpBizData = "http://127.0.0.1:5000/businesses/toronto";
 yelpSummaryData = "http://127.0.0.1:5000/businesses/toronto/summary_data";
 yelpBizCatData = "http://127.0.0.1:5000/businesses/toronto/biz_cat_summary";
 yelpTipsData = "http://127.0.0.1:5000/businesses/toronto/tips";
+yelpCheckinsData = "http://127.0.0.1:5000/businesses/toronto/checkins";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -31,6 +32,50 @@ var myMap = L.map("yelp-map", {
     zoom: 10,
     layers: [streetmap]
 });
+
+// Read the JSON dataset using d3
+d3.json(yelpBizData).then(yelpData => {
+    displaySummaryStats(yelpData);
+    displayCityMap(yelpData);
+    buildReviewsVsStarsChart(yelpData);
+});
+
+d3.json(yelpCheckinsData).then(yCData => {
+    displayTotalCheckins(yCData);
+});
+
+function displayTotalCheckins(yCData) {
+
+    var checkinDates = yCData.map(yCD => {
+        return yCD.date;
+    });
+
+    var totalCheckins = 0;
+    checkinDates.map(checkinDate => {
+        totalCheckins = totalCheckins + checkinDate.split(',').length;
+    });
+
+    d3.select("#total-checkins").text(totalCheckins.toLocaleString('en-US'));
+};
+
+function displaySummaryStats(yelpData) {
+
+    d3.select("#businesses-count").text(yelpData.length.toLocaleString('en-US'));
+
+    var reviewsArray = yelpData.map(yD => {
+        return yD.review_count;
+    });
+
+    var averageReviews = Math.round(calculateAverage(reviewsArray));
+    d3.select("#average-reviews").text(averageReviews.toLocaleString('en-US'));
+
+    var starsArray = yelpData.map(yD => {
+        return yD.stars;
+    });
+
+    var averageStars = calculateAverage(starsArray).toFixed(1);
+    d3.select("#average-stars-summary").text(averageStars.toLocaleString('en-US'));
+}
 
 d3.json(yelpSummaryData).then(ySummaryData => {
     initializeCategories(ySummaryData);
@@ -91,8 +136,10 @@ function initializeCategories(ySummaryData) {
         .enter()
         .append("option")
         .text(value => {return value;});
+    
+    buildGaugeChart(categories[0]);
 }
-  
+
 function optionChanged(category) {
     //buildMetadata(category);
     buildGaugeChart(category);
@@ -157,14 +204,6 @@ function buildGaugeChart(category) {
     });
 }
 
-// Read the JSON dataset using d3
-d3.json(yelpBizData).then(yelpData => {
-    displaySummaryStats(yelpData);
-    displayCityMap(yelpData);
-    buildReviewsVsStarsChart(yelpData);
-    //populateData(yelpData);
-});
-
 d3.json(yelpTipsData).then(yTipsData => {
     buildTipsTagCloud(yTipsData);
 });
@@ -223,25 +262,6 @@ function buildTipsTagCloud(yTipsData) {
     chart.container("tips-tag-cloud");
     // Intiate drawing the chart
     chart.draw();
-}
-
-function displaySummaryStats(yelpData) {
-
-    d3.select("#businesses-count").text(yelpData.length);
-
-    var reviewsArray = yelpData.map(yD => {
-        return yD.review_count;
-    });
-
-    var averageReviews = Math.round(calculateAverage(reviewsArray));
-    d3.select("#average-reviews").text(averageReviews);
-
-    var starsArray = yelpData.map(yD => {
-        return yD.stars;
-    });
-
-    var averageStars = calculateAverage(starsArray).toFixed(1);
-    d3.select("#average-stars-summary").text(averageStars);
 }
 
 function calculateAverage(arrayOfNumbers) {
@@ -346,24 +366,4 @@ function buildReviewsVsStarsChart(yelpData)
 
     // Plotly.newPlot('reviews-stars-scatter-plot', data, layout);
     // ----------------------------------------------------------------------------
-}
-
-function populateData(yelpData) {
-    // Get a reference to the dropdown list
-    var dropDownFilter = d3.select("#dropdown-filter");
-
-    var filterArray = yelpData.map(yD => {
-        return yD.state;
-    });
-    
-    //De-dup the array, sort and save
-    filterArray = Array.from(new Set(filterArray)).sort();
-    console.log(filterArray);
-
-    // Populate the  dropdown filter with the new array of values
-    dropDownFilter.selectAll("option")
-        .data(filterArray)
-        .enter()
-        .append("option")
-        .text(value => {return value;});
 }

@@ -23,7 +23,6 @@ def businesses():
 
     yelp_business_data = []
     
-    # return yelp_business_data
     for toronto_business in toronto_businesses:
         yelp_business_data.append(toronto_business)
 
@@ -39,7 +38,6 @@ def summary_data():
 
     yelp_business_summary_data = []
     
-    # return yelp_business_data
     for toronto_business in toronto_business_summary:
         yelp_business_summary_data.append(toronto_business)
 
@@ -55,7 +53,6 @@ def biz_cat_summary_data():
 
     yelp_biz_cat_summary_data = []
     
-    # return yelp_business_data
     for toronto_biz_cat in toronto_biz_cat_summary:
         yelp_biz_cat_summary_data.append(toronto_biz_cat)
 
@@ -71,12 +68,26 @@ def tips():
 
     yelp_tips_data = []
     
-    # return yelp_business_data
     for tip in toronto_business_tips:
         yelp_tips_data.append(tip)
 
     yelp_tips_data = json.dumps(yelp_tips_data, default=json_util.default)
     return yelp_tips_data
+
+# Create route that finds the Yelp tips data from Mongo
+@app.route("/businesses/toronto/checkins")
+def checkins():
+
+    # Find data
+    toronto_business_checkins = mongo.db.toronto_businesses_checkins.find()
+
+    yelp_checkins_data = []
+    
+    for checkin in toronto_business_checkins:
+        yelp_checkins_data.append(checkin)
+
+    yelp_checkins_data = json.dumps(yelp_checkins_data, default=json_util.default)
+    return yelp_checkins_data
 
 if __name__ == "__main__":
     app.run(debug=True)

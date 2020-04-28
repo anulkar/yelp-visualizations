@@ -46,6 +46,22 @@ def summary_data():
     yelp_business_summary_data = json.dumps(yelp_business_summary_data, default=json_util.default)
     return yelp_business_summary_data
 
+# Create route that finds the Yelp businesses summary document from Mongo
+@app.route("/businesses/toronto/biz_cat_summary")
+def biz_cat_summary_data():
+
+    # Find data
+    toronto_biz_cat_summary = mongo.db.toronto_biz_cat_summary.find()
+
+    yelp_biz_cat_summary_data = []
+    
+    # return yelp_business_data
+    for toronto_biz_cat in toronto_biz_cat_summary:
+        yelp_biz_cat_summary_data.append(toronto_biz_cat)
+
+    yelp_biz_cat_summary_data = json.dumps(yelp_biz_cat_summary_data, default=json_util.default)
+    return yelp_biz_cat_summary_data
+
 # Create route that finds the Yelp tips data from Mongo
 @app.route("/businesses/toronto/tips")
 def tips():

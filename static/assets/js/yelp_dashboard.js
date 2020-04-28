@@ -2,12 +2,8 @@
 host = "http://localhost:";
 port = "5000";
 
-// Build API URLs to retrieve Yelp JSON datasets stored locally in MongoDB
-yelpBizData = host + port + "/businesses/toronto";
-yelpSummaryData = host + port + "/businesses/toronto/summary_data";
-yelpBizCatData = host + port + "/businesses/toronto/biz_cat_summary";
-yelpTipsData = host + port + "/businesses/toronto/tips";
-yelpCheckinsData = host + port + "/businesses/toronto/checkins";
+// Build API URL to retrieve top 3 cities from Yelp's JSON dataset stored locally in MongoDB
+yelpCities = host + port + "/businesses/top_3_cities";
 
 // Define all the base map layers: Streets and Dark styles
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -30,23 +26,66 @@ var baseMaps = {
     "Dark Map": darkmap
 };
 
-// Create our map, giving it the streetmap view by default; we will add overlays later
 var myMap = L.map("yelp-map", {
-    center: [43.651070, -79.347015],
-    zoom: 10,
+    center: [39.381266, -97.922211],
+    zoom: 4,
     layers: [streetmap]
 });
 
-// Read the JSON dataset using d3
-d3.json(yelpBizData).then(yelpData => {
-    displaySummaryStats(yelpData);
-    displayCityMap(yelpData);
-    buildReviewsVsStarsChart(yelpData);
+// Create a layer control and add base maps to the map
+var layerControl = L.control.layers(baseMaps).addTo(myMap);
+layerControl.expand();
+
+d3.json(yelpCities).then(yelpCity => {
+    populateCityFilter(yelpCity);
 });
 
-d3.json(yelpCheckinsData).then(yCData => {
-    displayTotalCheckins(yCData);
-});
+function cityChanged(city) {
+    // Build all API URLs to retrieve Yelp's JSON dataset stored locally in MongoDB
+    yelpBizData = host + port + "/businesses/" + city;
+    yelpSummaryData = host + port + "/businesses/" + city + "/summary_data";
+    yelpBizCatData = host + port + "/businesses/" + city + "/biz_cat_summary";
+    yelpTipsData = host + port + "/businesses/" + city + "/tips";
+    yelpCheckinsData = host + port + "/businesses/" + city + "/checkins";
+
+    d3.json(yelpBizData).then(yelpData => {
+        displaySummaryStats(yelpData);
+        displayCityMap(yelpData, city);
+        buildReviewsVsStarsChart(yelpData, city);
+    });
+    
+    d3.json(yelpCheckinsData).then(yCData => {
+        displayTotalCheckins(yCData);
+    });
+
+    d3.json(yelpSummaryData).then(ySummaryData => {
+        initializeCategories(ySummaryData);
+    });
+
+    d3.json(yelpBizCatData).then(yBizCatData => {
+        buildBizCategoriesBarChart(yBizCatData, city);
+    });
+
+    d3.json(yelpTipsData).then(yTipsData => {
+        buildTipsTagCloud(yTipsData);
+    });
+}
+
+function populateCityFilter(yelpCity) {
+    var selector = d3.select("#city-filter");
+
+    var cities = yelpCity.map(yCity => {
+        return yCity._id;
+    });
+    // Populate the dropdown filter with the list of categories
+    selector.selectAll("option")
+        .data(cities)
+        .enter()
+        .append("option")
+        .text(value => {return value;});
+
+    cityChanged(cities[0]);
+}
 
 function displayTotalCheckins(yCData) {
 
@@ -81,15 +120,7 @@ function displaySummaryStats(yelpData) {
     d3.select("#average-stars-summary").text(averageStars.toLocaleString('en-US'));
 }
 
-d3.json(yelpSummaryData).then(ySummaryData => {
-    initializeCategories(ySummaryData);
-});
-
-d3.json(yelpBizCatData).then(yBizCatData => {
-    buildBizCategoriesBarChart(yBizCatData);
-});
-
-function buildBizCategoriesBarChart(yBizCatData) {
+function buildBizCategoriesBarChart(yBizCatData, city) {
 
     // Create Dataset using anychart.js Library
     var dataset = anychart.data.set(yBizCatData);
@@ -107,7 +138,7 @@ function buildBizCategoriesBarChart(yBizCatData) {
 
     chart.xAxis().title("Category");//create name for X axis
     chart.yAxis().title("Business Count"); //create name for Y axis
-    chart.title("Business Count by Category"); // setting title
+    chart.title("Business Count by Category for " + city); // setting title
     chart.data(yBizCatData); //specify data source
     chart.yScale().stackMode('value');//setting percent stacking
     // var legend = chart.legend(); 
@@ -132,7 +163,9 @@ function buildBizCategoriesBarChart(yBizCatData) {
 function initializeCategories(ySummaryData) {
     var selector = d3.select("#category-filter");
 
-    var categories = ySummaryData[0].names;
+    var categories = ySummaryData.map(ySData => {
+        return ySData.parent;
+    });
 
     // Populate the dropdown filter with the list of categories
     selector.selectAll("option")
@@ -169,10 +202,10 @@ function buildMetadata(category) {
 // The gauge chart
 function buildGaugeChart(category) {
     var averageStars;
-    d3.json(yelpSummaryData).then((data) => {
-        data[0].metadata.map(metaData => {
-            if (metaData.parent == category) {
-                averageStars = metaData.average_review;
+    d3.json(yelpSummaryData).then(ySData => {
+        ySData.map(data => {
+            if (data.parent == category) {
+                averageStars = data.average_review;
                 // Build the gauge chart
                 var data = [{
                     type: "indicator",
@@ -207,10 +240,6 @@ function buildGaugeChart(category) {
         });
     });
 }
-
-d3.json(yelpTipsData).then(yTipsData => {
-    buildTipsTagCloud(yTipsData);
-});
 
 function buildTipsTagCloud(yTipsData) {
 
@@ -273,7 +302,21 @@ function calculateAverage(arrayOfNumbers) {
     return total / arrayOfNumbers.length;
 }
 
-function displayCityMap(yelpData) {
+function displayCityMap(yelpData, city) {
+
+    var cityCoordinates = []
+    if (city == "Las Vegas")
+        cityCoordinates = [36.114647, -115.172813];
+    else if
+        (city == "Phoenix")
+        cityCoordinates = [33.448376, -112.074036];
+    else // Toronto
+        cityCoordinates = [43.651070, -79.347015];
+        
+    // Create our map, giving it the streetmap view by default; we will add overlays later
+    // myMap.panTo(new L.LatLng(33.448376, -112.074036), 10);
+    myMap.setView(cityCoordinates, 10);
+
     // Define array to hold markers for businesses
     var businessMarkers = [];
 
@@ -284,64 +327,62 @@ function displayCityMap(yelpData) {
         businessMarkers.push(L.marker(coordinates)
             .bindPopup(yelpData[i].name)
             .addTo(myMap));
-        if (businessMarkers.length == 100) {
+        if (businessMarkers.length == 50) {
             break;
         }
     }
-
     // Create a layer group for businesses
-    var businesses = L.layerGroup(businessMarkers);
+    //var businesses = L.layerGroup(businessMarkers);
 
-    // Create an overlay object
-    var overlayMaps = {
-        "Businesses": businesses
-    };
+    // // Create an overlay object
+    // var overlayMaps = {
+    //     "Businesses": businesses
+    // };
 
-    // Pass our map layers into our layer control
+    // Pass in the overlayMap to the layer control
     // Add the layer control to the map
-    L.control.layers(baseMaps, overlayMaps, {
-        collapsed: false
-    }).addTo(myMap);
+    //layerControl.addOverlay(businessMarkers, "Businesses").addTo(myMap);
+    layerControl.expand();
 }
 
-function buildReviewsVsStarsChart(yelpData)
+function buildReviewsVsStarsChart(yelpData, city)
 {   
     // Create Dataset using anychart.js Library
     var dataset = anychart.data.set(yelpData);
     //console.log(dataset);
     // Map data
     var mapping = dataset.mapAs({x:"stars", value:"review_count"});
-
+   
     // create the chart
-    var chart = anychart.scatter(mapping);
+    scatterChart = anychart.scatter(mapping);
 
     // enable major grids
-    chart.xGrid(true);
-    chart.yGrid(true);
+    scatterChart.xGrid(true);
+    scatterChart.yGrid(true);
 
     // configure the visual settings of major grids
-    chart.xGrid().stroke({color: "#85adad", thickness: 0.7});
-    chart.yGrid().stroke({color: "#85adad", thickness: 0.7});
+    scatterChart.xGrid().stroke({color: "#85adad", thickness: 0.7});
+    scatterChart.yGrid().stroke({color: "#85adad", thickness: 0.7});
 
     // enable minor grids
-    chart.xMinorGrid(true);
-    chart.yMinorGrid(true);
+    scatterChart.xMinorGrid(true);
+    scatterChart.yMinorGrid(true);
 
     // configure the visual settings of minor grids
-    chart.xMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
-    chart.yMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+    scatterChart.xMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
+    scatterChart.yMinorGrid().stroke({color: "#85adad", thickness: 0.3, dash: 5});
 
     // set the chart title
-    chart.xAxis().title("Stars (Rating)");//create name for X axis
-    chart.yAxis().title("Review Count"); //create name for Y axis
+    scatterChart.xAxis().title("Stars (Rating)");//create name for X axis
+    scatterChart.yAxis().title("Review Count"); //create name for Y axis
 
-    chart.title("Review Counts by Stars (Rating)"); 
+    scatterChart.title("Review Counts by Stars (Rating) for " + city); 
 
     // set the container
-    chart.container("reviews-stars-scatter-plot");
+    scatterChart.container("reviews-stars-scatter-plot");
 
     // Intiate drawing the chart
-    chart.draw();
+    scatterChart.draw();
 
     // **** Commented code below for same scatter plot using Plotly.js instead ****
     // ----------------------------------------------------------------------------

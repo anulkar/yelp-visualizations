@@ -2,7 +2,7 @@
 
 ## Rationale  
 
-Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Bubble chart, Map plot, Dot plot, Gauge chart and Word cloud.
+Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Map plot, Scatter plot, Gauge chart, and Word Cloud.
 
 ## Dataset
 * [Yelp's Open Dataset](https://www.yelp.com/dataset)

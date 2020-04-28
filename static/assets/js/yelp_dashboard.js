@@ -67,7 +67,7 @@ function cityChanged(city) {
     });
 
     d3.json(yelpTipsData).then(yTipsData => {
-        buildTipsTagCloud(yTipsData);
+        buildTipsTagCloud(yTipsData, city);
     });
 }
 
@@ -241,7 +241,7 @@ function buildGaugeChart(category) {
     });
 }
 
-function buildTipsTagCloud(yTipsData) {
+function buildTipsTagCloud(yTipsData, city) {
 
     // Map the tips in the database
     var tips = yTipsData.map(row => row.text)
@@ -255,7 +255,7 @@ function buildTipsTagCloud(yTipsData) {
     // Set up criteria for tagCloud
     chart.data(tips, {
         mode: "by-word",
-        maxItems: 1500,
+        maxItems: 1000,
         ignoreItems: [
                         "the",
                         "and",
@@ -290,7 +290,7 @@ function buildTipsTagCloud(yTipsData) {
     // Set up the tooltip to display the % of words in the sample
     chart.tooltip().format("{%yPercentOfTotal}% ({%value})");
     // Set the title
-    chart.title("Most Common Words Found in Tips left by Yelpers");
+    chart.title("Most Common Words Found in Tips left by " + city + " Yelpers");
     // set the container
     chart.container("tips-tag-cloud");
     // Intiate drawing the chart
@@ -325,7 +325,11 @@ function displayCityMap(yelpData, city) {
         coordinates.push(yelpData[i].latitude);
         coordinates.push(yelpData[i].longitude)
         businessMarkers.push(L.marker(coordinates)
-            .bindPopup(yelpData[i].name)
+            .bindPopup("<dt>" + yelpData[i].name + "</dt><hr>" 
+            + "<dt>" + yelpData[i].address + "</dt>"
+            + "<dt>" + yelpData[i].parent + "</dt><hr>"
+            + "<dt>" + yelpData[i].stars + " Stars</dt>"
+            + "<dt>" + yelpData[i].review_count + " Reviews</dt>")
             .addTo(myMap));
         if (businessMarkers.length == 50) {
             break;
@@ -352,9 +356,9 @@ function buildReviewsVsStarsChart(yelpData, city)
     //console.log(dataset);
     // Map data
     var mapping = dataset.mapAs({x:"stars", value:"review_count"});
-   
+
     // create the chart
-    scatterChart = anychart.scatter(mapping);
+    var scatterChart = anychart.scatter(mapping);
 
     // enable major grids
     scatterChart.xGrid(true);
@@ -378,11 +382,12 @@ function buildReviewsVsStarsChart(yelpData, city)
 
     scatterChart.title("Review Counts by Stars (Rating) for " + city); 
 
-    // set the container
+    // set the container    
     scatterChart.container("reviews-stars-scatter-plot");
 
-    // Intiate drawing the chart
     scatterChart.draw();
+    // Intiate drawing the chart
+    //scatterChart.autoRedraw(true);
 
     // **** Commented code below for same scatter plot using Plotly.js instead ****
     // ----------------------------------------------------------------------------

@@ -48,20 +48,18 @@ html{
 {
   height: 90%;
   width: 100%;
-  display: block;
+  margin: 0; padding: 0;
 }
 #reviews-stars-scatter-plot
 {
   height: 90%;
   width: 100%;
-  display: block;
 }
 
 #tips-tag-cloud
 {
   height: 77%;
   width: 100%;
-  display: block;
 }
 
 #footer {
@@ -83,3 +81,13 @@ html{
 .form-check-label {
   color: white;
 }
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background:#2c3e50;
+  color:#fff;
+  font-size:16px;
+  line-height:24px;
+  }
+.custom-popup .leaflet-popup-content-wrapper a {
+  color:rgba(255,255,255,0.5);
+  }

@@ -5,6 +5,9 @@ yelp_academic_*.json
 # .vscode
 .vscode/
 
+# .DS_Store for Macs 
+.DS_Store
+
 # Api Keys
 api_keys.py
 config.js

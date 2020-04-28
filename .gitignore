@@ -1,6 +1,7 @@
 # JSON datasets 
 yelp_converted_*.json
 yelp_academic_*.json
+yelp_las_vegas_checkin_business_dataset_records.json
 
 # .vscode
 .vscode/

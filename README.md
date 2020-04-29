@@ -2,7 +2,7 @@
 
 ## Rationale  
 
-Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Bubble chart, Map plot, Dot plot, Gauge chart and Word cloud.
+Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Map plot, Scatter plot, Gauge chart, and Word Cloud.
 
 ## Dataset
 * [Yelp's Open Dataset](https://www.yelp.com/dataset)
@@ -20,7 +20,7 @@ https://github.com/anulkar/yelp-visualizations/blob/master/images/Rough%20Sketch
 * [D3.js](https://d3js.org/)
 * AnyChart(https://www.anychart.com/)
 * [Plotly.js](https://plotly.com/javascript/)
-* Python and Pandas to call the data, understand it, cleanse/manipulte it and create task specific JSON's
+* Python/Pandas and Excel to call the data, understand it, cleanse/manipulte it and create task specific JSON's
 
 
 ## GitHub Repository

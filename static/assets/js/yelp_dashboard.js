@@ -122,6 +122,16 @@ function displaySummaryStats(yelpData) {
 
 function buildBizCategoriesBarChart(yBizCatData, city) {
 
+    //var navTag = d3.select("#nav-viz1");
+    // Populate the dropdown filter with the list of categories
+    // navTag.selectAll("div")
+    //     .data(cities)
+    //     .enter()
+    //     .append("option")
+    //     .text(value => {return value;});
+
+    //     <div id="biz-cat-bar-chart"></div>
+
     // Create Dataset using anychart.js Library
     var dataset = anychart.data.set(yBizCatData);
     // Create Dataset using anychart.js Library

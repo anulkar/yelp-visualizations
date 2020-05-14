@@ -31,7 +31,7 @@ Explore and communicate insights from Yelp's businesses and tips dataset for one
 
 3. On your local machine, move the three Yelp JSON files above to the `static/assets/data` folder within your repo. Unzip the file `yelp_las_vegas_checkin_business_dataset_records.json.zip` located in the same folder.
 
-4. Run all the cells in the Jupyter Notebook `yelp_dataset_cleanup.json` (for EDA purposes and to extract/converta data that we want to plot and analyze).
+4. Run all the cells in the Jupyter Notebook `yelp_dataset_cleanup.json` (for EDA purposes and to extract/convert data that we want to plot and analyze).
 
 5. Make sure you have [MongoDB](https://www.mongodb.com/) installed on your machine, preferably with the [MongoDB Compass GUI](https://www.mongodb.com/products/compass).
 
@@ -51,9 +51,7 @@ Explore and communicate insights from Yelp's businesses and tips dataset for one
    * Debugger is active!
    * Debugger PIN: 257-766-732
    ```
-8. Launch the app in the browser via: http://localhost:5500/yelp-visualizations/templates/index.html
-   You should see an interactive Yelp Dashboard for Las Vegas as follows, with options to select various charts.
+8. Launch the app in the browser by going to: http://localhost:5500/yelp-visualizations/templates/index.html.
+   You should see an interactive Yelp Dashboard for Las Vegas as shown below, with options to select various charts.
 
    ![Yelp Dashboard Screenshot](./static/assets/resources/YelpDashboard.png)
-
-

@@ -2,7 +2,7 @@
 
 ## Rationale  
 
-Explore and communicate insights from Yelp's businesses and tips dataset for one city, via an interactive web visualizations dashboard using a Bar chart, Map plot, Scatter plot, Gauge chart, and Word Cloud. 
+Explore and communicate insights from Yelp's businesses and tips dataset for Las Vegas, via an interactive web visualizations dashboard. 
 
 ## Dataset
 * [Yelp's Open Dataset](https://www.yelp.com/dataset)
